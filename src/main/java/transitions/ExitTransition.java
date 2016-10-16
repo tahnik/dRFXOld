@@ -1,6 +1,7 @@
 package transitions;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
 import javafx.animation.Transition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,19 +15,22 @@ import javafx.util.Duration;
 public class ExitTransition {
 
     private static final int TRANSITION_DURATION = 150;
-    private static FadeTransition ft;
-    private static Stage primaryStage;
 
     public static void play(Pane pane) {
-        ft = new FadeTransition(Duration.millis(TRANSITION_DURATION), pane);
+        ScaleTransition st = new ScaleTransition(Duration.millis(TRANSITION_DURATION + 200), pane);
+        st.setFromX(1.0f);
+        st.setFromY(1.0f);
+        st.setToX(0.9f);
+        st.setToY(0.9f);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(TRANSITION_DURATION), pane);
         ft.setFromValue(1.0);
         ft.setToValue(0);
         ft.play();
-        primaryStage = (Stage) pane.getScene().getWindow();
-        ft.setOnFinished(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                primaryStage.close();
-            }
+        st.play();
+        Stage primaryStage = (Stage) pane.getScene().getWindow();
+        ft.setOnFinished((event) -> {
+            primaryStage.close();
         });
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import utilities.Constants;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +23,7 @@ public class MainPaneStage extends Stage {
 
     public MainPaneStage() {
         //Load the main pane fxml file
-        FXMLLoader mainPaneFXML = new FXMLLoader(getClass().getResource("../../../resources/main/views/MainPane.fxml"));
+        FXMLLoader mainPaneFXML = new FXMLLoader(getClass().getResource(Constants.PATH_MAINPANEFXML));
 
         //Get the singleton instance of the controller
         MainPaneController mainPaneController = MainPaneController.getInstance();
@@ -31,7 +32,7 @@ public class MainPaneStage extends Stage {
         mainPaneFXML.setController(mainPaneController);
 
         try {
-            mainPane = new Scene((BorderPane) mainPaneFXML.load(), 600, 600);
+            mainPane = new Scene(mainPaneFXML.load(), Constants.WIDTH, Constants.HEIGHT);
         } catch (IOException e) {
             e.printStackTrace();
         }

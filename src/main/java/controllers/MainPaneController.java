@@ -14,6 +14,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import transitions.ExitTransition;
+import transitions.StartupTransition;
 import utilities.Constants;
 
 import java.net.URL;
@@ -71,6 +72,8 @@ public class MainPaneController implements Initializable {
     private Stage primaryStage = null;
 
     public void initialize(URL location, ResourceBundle resources) {
+
+        StartupTransition.play(mainGUI);
 
         // Exit the GUI if the close button is pressed using a special transition
         icon_main_exit.setOnMouseClicked((event) -> {
@@ -145,11 +148,6 @@ public class MainPaneController implements Initializable {
 
         mainGUI.setOnMouseDragged((event) -> {
             primaryStage = (Stage) mainPaneTitleBar.getScene().getWindow();
-            height = primaryStage.getHeight();
-            width = primaryStage.getWidth();
-
-            xMinResizeOffset = width - xResizeOffset;
-            yMinResizeOffset = height - yResizeOffset;
 
             if(widthBeingResized && event.getSceneX() >= Constants.WIDTH) {
                 primaryStage.setWidth(event.getSceneX());
@@ -161,6 +159,7 @@ public class MainPaneController implements Initializable {
         mainGUI.setOnMouseReleased((event -> {
             widthBeingResized = false;
             heightBeingResized = false;
+            System.gc();
         }));
     }
 }
