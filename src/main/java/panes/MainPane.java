@@ -3,10 +3,7 @@ package panes;
 import controllers.MainPaneController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import utilities.Constants;
 
 import java.io.IOException;
@@ -15,6 +12,7 @@ import java.io.IOException;
  * Created by tahnik on 16/10/2016.
  */
 public class MainPane {
+    AnchorPane homePane = null;
     public Scene getMainPane() {
         FXMLLoader mainPaneFXML = new FXMLLoader(getClass().getResource(Constants.PATH_MAINPANEFXML));
         FXMLLoader homePaneFXML = new FXMLLoader(getClass().getResource(Constants.PATH_HOMEPANEFXML));
@@ -26,7 +24,7 @@ public class MainPane {
         mainPaneFXML.setController(mainPaneController);
 
         VBox mainPane = null;
-        BorderPane homePane = null;
+        homePane = null;
         try {
             mainPane = mainPaneFXML.load();
             homePane = homePaneFXML.load();
@@ -38,7 +36,9 @@ public class MainPane {
 
         Scene mainPaneScene = new Scene(mainPane, Constants.WIDTH, Constants.HEIGHT);
         assert homePane != null;
-        homePane.prefHeightProperty().bind(mainPaneScene.heightProperty());
+        mainPaneScene.heightProperty().addListener((ov, t, t1) -> {
+            homePane.setPrefHeight(t1.doubleValue() - 30);
+        });
         mainPaneScene.setFill(null);
 
         return mainPaneScene;
