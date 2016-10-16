@@ -2,3 +2,11 @@
     -fx-font-size: 18;
     -fx-text-fill: "white";
 }
+
+.tag_buttons {
+    -fx-background-color: "TRANSPARENT";
+    -fx-border-color: "#aaaab8";
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+    -fx-padding: 3;
+}
