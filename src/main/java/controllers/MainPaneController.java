@@ -1,19 +1,16 @@
 package controllers;
 
-import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import transitions.ExitTransition;
+import transitions.MinimiseTransition;
 import transitions.StartupTransition;
 import utilities.Constants;
 
@@ -44,9 +41,13 @@ public class MainPaneController implements Initializable {
     @FXML
     private ImageView icon_main_exit;
     @FXML
-    private BorderPane mainGUI;
+    private Pane mainGUI;
     @FXML
     private GridPane mainPaneTitleBar;
+    @FXML
+    private ImageView icon_main_minimise;
+    @FXML
+    private ImageView icon_main_maximise;
 
     // This offset will be used to calculate the movement when GUI is being dragged using the top title panel
     private double xOffset = 0;
@@ -69,6 +70,12 @@ public class MainPaneController implements Initializable {
     private boolean widthBeingResized = false;
     private boolean heightBeingResized = false;
 
+    private boolean maximised = false;
+    private double mainGUIWidthBeforeMaximising = 0;
+    private double mainGUIHeightBeforeMaximising = 0;
+    private double xMainGUIPositionBeforeMaximising = 0;
+    private double yMainGUIPositionBeforeMaximising = 0;
+
     private Stage primaryStage = null;
 
     public void initialize(URL location, ResourceBundle resources) {
@@ -78,6 +85,58 @@ public class MainPaneController implements Initializable {
         // Exit the GUI if the close button is pressed using a special transition
         icon_main_exit.setOnMouseClicked((event) -> {
             ExitTransition.play(mainGUI);
+        });
+
+        // Listener for resize events for the main title bar.
+        // The main title bar is a GridPane. GridPane doesn't automatically resize.
+        mainGUI.widthProperty().addListener((ov, t, t1) -> {
+            mainPaneTitleBar.setPrefWidth(t1.doubleValue());
+        });
+
+        // Minimises the main gui.
+        icon_main_minimise.setOnMouseClicked((event) -> {
+            primaryStage = (Stage) icon_main_minimise.getScene().getWindow();
+            // This listener checks if the GUI has been clicked from taskbar.
+            // If it has been clicked from taskbar it sets the opacity back to 1
+            primaryStage.iconifiedProperty().addListener((ov, t, t1) -> {
+                if(!t1) {
+                    mainGUI.setOpacity(1.0);
+                }
+            });
+
+            // Minimises the GUI using a special transition
+            MinimiseTransition.play(mainGUI);
+        });
+
+        icon_main_minimise.setOnMouseEntered((event) -> {
+
+        });
+
+        icon_main_maximise.setOnMouseClicked((event) -> {
+            primaryStage = (Stage) icon_main_maximise.getScene().getWindow();
+            if(maximised) {
+                primaryStage.setX(xMainGUIPositionBeforeMaximising);
+                primaryStage.setY(yMainGUIPositionBeforeMaximising);
+
+                primaryStage.setWidth(mainGUIWidthBeforeMaximising);
+                primaryStage.setHeight(mainGUIHeightBeforeMaximising);
+            }else {
+                Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                xMainGUIPositionBeforeMaximising = primaryStage.getX();
+                yMainGUIPositionBeforeMaximising = primaryStage.getY();
+
+                mainGUIWidthBeforeMaximising = primaryStage.getWidth();
+                mainGUIHeightBeforeMaximising = primaryStage.getHeight();
+
+                primaryStage.setX(primaryScreenBounds.getMinX());
+                primaryStage.setY(primaryScreenBounds.getMinY());
+
+                primaryStage.setWidth(primaryScreenBounds.getWidth());
+                primaryStage.setHeight(primaryScreenBounds.getHeight());
+            }
+
+            maximised = !maximised;
         });
 
         /*

@@ -1,6 +1,6 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
-import stages.MainPaneStage;
+import stages.MainStage;
 
 /**
  * Created by tahnik on 13/10/2016.
@@ -8,9 +8,8 @@ import stages.MainPaneStage;
  * Entry point for the application. Opens up the main pane
  */
 public class devRant extends Application {
-
     public void start(Stage primaryStage) throws Exception {
-        new MainPaneStage();
+        new MainStage();
     }
 
     public static void main(String[] args) {

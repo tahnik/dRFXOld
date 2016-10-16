@@ -11,4 +11,5 @@ public class Constants {
     public static final int HEIGHT = 600;
 
     public static final String PATH_MAINPANEFXML = "/resources/main/views/MainPane.fxml";
+    public static final String PATH_HOMEPANEFXML = "/resources/main/views/SidePane.fxml";
 }
